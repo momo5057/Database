@@ -1,0 +1,80 @@
+SQL> select make, count(make), max(Cost), min(cost) from vehicles group by make;
+
+MA COUNT(MAKE)  MAX(COST)  MIN(COST)                                            
+-- ----------- ---------- ----------                                            
+T            2        250        150                                            
+D            2        225        125                                            
+H            2        200        175                                            
+F            4        200        130                                            
+
+SQL> select customers.name, vehicles.make, vehicles.model, ck_out_date, ret_date from rentals 
+inner join customers on customers.c_id = rentals.c_id 
+inner join vehicles on vehicles.id = rentals.v_id;
+
+NAME       MA MODEL      CK_OUT_DA RET_DATE                                     
+---------- -- ---------- --------- ---------                                    
+Ashley     F  mustang    09-JUL-20 13-JUL-20                                    
+Bart       F  flex       12-JUL-20 27-JUL-20                                    
+Cindy      T  corolla    22-JUL-20 02-AUG-20                                    
+Ashley     D  sierra     29-JUL-20 04-AUG-20                                    
+Edward     F  fiesta     01-AUG-10 05-AUG-20                                    
+Fred       H  accord     05-AUG-20 12-AUG-20                                    
+Gracie     F  explorer   15-AUG-20 21-AUG-20                                    
+Henry      T  camry      19-AUG-20 21-AUG-20                                    
+Jenny      H  civic      29-AUG-20 04-AUG-20                                    
+Denny      H  accord     07-OCT-20                                              
+Bart       T  corolla    11-OCT-20 17-OCT-20                                    
+
+11 rows selected.
+
+SQL> select vehicles.lic_no, vehicles.model, ck_out_date, miles_in - miles_out from rentals 
+join vehicles on vehicles.id = rentals.v_id where miles_in is not null 
+order by ck_out_date desc;
+
+LIC_NO     MODEL      CK_OUT_DA MILES_IN-MILES_OUT                              
+---------- ---------- --------- ------------------                              
+IJK901     corolla    11-OCT-20                889                              
+HIJ890     civic      29-AUG-20                627                              
+JKL012     camry      19-AUG-20                122                              
+CDE345     explorer   15-AUG-20                698                              
+GHI789     accord     05-AUG-20                589                              
+FGH678     sierra     29-JUL-20               1238                              
+IJK901     corolla    22-JUL-20                739                              
+DEF456     flex       12-JUL-20                237                              
+ABC1234    mustang    09-JUL-20                613                              
+BCD2345    fiesta     01-AUG-10                980                              
+
+10 rows selected.
+
+SQL> select vehicles.lic_no, count(v_id) from rentals 
+full join vehicles on vehicles.id = rentals.v_id 
+group by rentals.v_id, vehicles.lic_no;
+
+LIC_NO     COUNT(V_ID)                                                          
+---------- -----------                                                          
+ABC1234              1                                                          
+DEF456               1                                                          
+CDE345               1                                                          
+HIJ890               1                                                          
+GHI789               2                                                          
+IJK901               2                                                          
+EFG567               0                                                          
+FGH678               1                                                          
+JKL012               1                                                          
+BCD2345              1                                                          
+
+10 rows selected.
+
+SQL> select name from customers where name not in 
+(select customers.name from rentals 
+inner join customers on customers.c_id = rentals.c_id 
+inner join vehicles on vehicles.id = rentals.v_id 
+where vehicles.cost != (select max(cost) from vehicles)) 
+intersect select customers.name from rentals 
+join customers on customers.c_id = rentals.c_id;
+
+NAME                                                                            
+----------                                                                      
+Cindy                                                                           
+
+SQL> spool off

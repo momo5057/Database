@@ -1,0 +1,134 @@
+SQL> select * from cat;
+
+TABLE_NAME   TABLE_TYPE                                                         
+------------ -----------                                                        
+CUSTOMERS    TABLE                                                              
+RENTALS      TABLE                                                              
+VEHICLES     TABLE                                                              
+
+SQL> desc vehicles
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL NUMBER(38)
+ VIN                                       NOT NULL NUMBER(38)
+ LIC_NO                                    NOT NULL CHAR(10)
+ MAKE                                               CHAR(2)
+ MODEL                                              CHAR(10)
+ YEAR                                               NUMBER(38)
+ COLOR                                              CHAR(8)
+ COST                                               NUMBER(6,2)
+
+SQL> desc customers
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ C_ID                                      NOT NULL NUMBER(38)
+ NAME                                      NOT NULL CHAR(10)
+ PHONE                                              CHAR(9)
+ EMAIL                                              CHAR(15)
+
+SQL> decs rentals
+SP2-0734: unknown command beginning "decs renta..." - rest of line ignored.
+SQL> desc rentals
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ C_ID                                      NOT NULL NUMBER(38)
+ V_ID                                      NOT NULL NUMBER(38)
+ CK_OUT_DATE                               NOT NULL DATE
+ MILES_OUT                                          NUMBER(38)
+ RET_DATE                                           DATE
+ MILES_IN                                           NUMBER(38)
+
+SQL>       select a.owner, a.table_name, column_name primary_key,
+  2              a.constraint_name
+  3        from   user_cons_columns a, user_constraints b
+  4        where  a.constraint_name = b.constraint_name and
+  5               constraint_type = 'P';
+
+OWNER        TABLE_NAME   PRIMARY_KEY  CONSTRAINT_NAME                          
+------------ ------------ ------------ ------------------------------           
+DBCLASS36    RENTALS      V_ID         SYS_C0025600                             
+DBCLASS36    RENTALS      C_ID         SYS_C0025600                             
+DBCLASS36    VEHICLES     ID           SYS_C0025596                             
+DBCLASS36    CUSTOMERS    C_ID         SYS_C0025591                             
+
+SQL>       select a.owner, a.table_name, a.column_name foreign_key,
+  2               b.table_name Referring_table, b.column_name
+  3               Primary_key
+  4        from   user_cons_columns a, user_cons_columns b,
+  5               user_constraints c
+  6        where  a.constraint_name = c.constraint_name and
+  7               c.r_constraint_name = b.constraint_name;
+
+OWNER        TABLE_NAME   FOREIGN_KEY  REFERRING_TABLE PRIMARY_KEY              
+------------ ------------ ------------ --------------- ------------             
+DBCLASS36    RENTALS      C_ID         CUSTOMERS       C_ID                     
+DBCLASS36    RENTALS      V_ID         VEHICLES        ID                       
+
+SQL>         select owner, table_name, search_condition from
+  2          user_constraints where search_condition is not null;
+
+OWNER        TABLE_NAME   SEARCH_CONDITION                                      
+------------ ------------ ---------------------------------------------         
+DBCLASS36    CUSTOMERS    "NAME" IS NOT NULL                                    
+DBCLASS36    VEHICLES     "VIN" IS NOT NULL                                     
+DBCLASS36    VEHICLES     "LIC_NO" IS NOT NULL                                  
+DBCLASS36    VEHICLES     make in ('F', 'D', 'H', 'T')                          
+DBCLASS36    VEHICLES     year in (2015, 2016, 2017, 2018, 2019, 2020)          
+DBCLASS36    RENTALS      "CK_OUT_DATE" IS NOT NULL                             
+
+6 rows selected.
+
+SQL> select * from vehicles
+  2  ;
+
+        ID        VIN LIC_NO     MA MODEL            YEAR COLOR          COST   
+---------- ---------- ---------- -- ---------- ---------- -------- ----------   
+         1          1 ABC1234    F  mustang          2017 red             200   
+         2          2 BCD2345    F  fiesta           2015 blue            150   
+         3          3 CDE345     F  explorer         2019 grey            175   
+         4          4 DEF456     F  flex             2016 black           130   
+         5          5 EFG567     D  charger          2020 white           225   
+         6          6 FGH678     D  sierra           2015 red             125   
+         7          7 GHI789     H  accord           2018 black           175   
+         8          8 HIJ890     H  civic            2016 grey            200   
+         9          9 IJK901     T  corolla          2020 gold            250   
+         0          0 JKL012     T  camry            2017 white           150   
+
+10 rows selected.
+
+SQL> select * from customers
+  2  ;
+
+      C_ID NAME       PHONE     EMAIL                                           
+---------- ---------- --------- ---------------                                 
+         1 Ashley     123456    ashley@gmail                                    
+         2 Bart       234567    bart@gmail                                      
+         3 Cindy      345678    cindy@gmail                                     
+         4 Denny      456789    denny@gmail                                     
+         5 Edward     567890    edward@gmail                                    
+         6 Fred       678901    fred@gmail                                      
+         7 Gracie     789012    gracie@gmail                                    
+         8 Henry      890123    henry@gmail                                     
+         9 Izzy       901234    izzy@gmail.com                                  
+        10 Jenny      012345    jenny@gmail.com                                 
+
+10 rows selected.
+
+SQL> select * from rentals;
+
+      C_ID       V_ID CK_OUT_DA  MILES_OUT RET_DATE    MILES_IN                 
+---------- ---------- --------- ---------- --------- ----------                 
+         1          1 09-JUL-20      23490 13-JUL-20      24103                 
+         2          4 12-JUL-20      43997 27-JUL-20      44234                 
+         3          9 22-JUL-20      38495 02-AUG-20      39234                 
+         4          6 29-JUL-20      29045 04-AUG-20      30283                 
+         5          2 01-AUG-10      20394 05-AUG-20      21374                 
+         6          7 05-AUG-20      40392 12-AUG-20      40981                 
+         7          3 15-AUG-20      20395 21-AUG-20      21093                 
+         8          0 19-AUG-20      56732 21-AUG-20      56854                 
+         9          5 23-AUG-20      47389 28-AUG-20      48273                 
+        10          8 29-AUG-20      58493 04-AUG-20      59120                 
+
+10 rows selected.
+
+SQL> spool off;

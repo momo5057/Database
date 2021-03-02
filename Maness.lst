@@ -1,0 +1,57 @@
+SQL> /
+Enter value for c_id: 20
+old   5:    new_c_id customers.c_id%type := &c_id;
+new   5:    new_c_id customers.c_id%type := 20;
+Enter value for v_id: 1
+old   6:    new_v_id rentals.v_id%type := &v_id;
+new   6:    new_v_id rentals.v_id%type := 1;
+Enter value for miles_out: 23456
+old   8:    new_miles_out rentals.miles_out%type := &miles_out;
+new   8:    new_miles_out rentals.miles_out%type := 23456;
+Invalid c_id                                                                    
+
+PL/SQL procedure successfully completed.
+
+SQL> /
+Enter value for c_id: 3
+old   5:    new_c_id customers.c_id%type := &c_id;
+new   5:    new_c_id customers.c_id%type := 3;
+Enter value for v_id: 30
+old   6:    new_v_id rentals.v_id%type := &v_id;
+new   6:    new_v_id rentals.v_id%type := 30;
+Enter value for miles_out: 12345
+old   8:    new_miles_out rentals.miles_out%type := &miles_out;
+new   8:    new_miles_out rentals.miles_out%type := 12345;
+Invalid v_id                                                                    
+
+PL/SQL procedure successfully completed.
+
+SQL> /
+Enter value for c_id: 2
+old   5:    new_c_id customers.c_id%type := &c_id;
+new   5:    new_c_id customers.c_id%type := 2;
+Enter value for v_id: 7
+old   6:    new_v_id rentals.v_id%type := &v_id;
+new   6:    new_v_id rentals.v_id%type := 7;
+Enter value for miles_out: 40981
+old   8:    new_miles_out rentals.miles_out%type := &miles_out;
+new   8:    new_miles_out rentals.miles_out%type := 40981;
+Car already checked out                                                         
+
+PL/SQL procedure successfully completed.
+
+SQL> /
+Enter value for c_id: 2
+old   5:    new_c_id customers.c_id%type := &c_id;
+new   5:    new_c_id customers.c_id%type := 2;
+Enter value for v_id: 8
+old   6:    new_v_id rentals.v_id%type := &v_id;
+new   6:    new_v_id rentals.v_id%type := 8;
+Enter value for miles_out: 59120
+old   8:    new_miles_out rentals.miles_out%type := &miles_out;
+new   8:    new_miles_out rentals.miles_out%type := 59120;
+Data added successfully                                                         
+
+PL/SQL procedure successfully completed.
+
+SQL> spool off

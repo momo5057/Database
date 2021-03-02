@@ -1,0 +1,48 @@
+SQL> select TO_CHAR(ck_out_date, 'Month'), count(ck_out_date) from rentals where ck_out_date >= '01-Jan-20' group by TO_CHAR(ck_out_date, 'Month');
+
+TO_CHAR(CK_OUT_DATE,'MONTH')         COUNT(CK_OUT_DATE)                         
+------------------------------------ ------------------                         
+July                                                  3                         
+November                                              1                         
+August                                                4                         
+October                                               2                         
+
+SQL> select customers.name from rentals join customers on customers.c_id = rentals.c_id where TO_CHAR(ck_out_date, 'Dy') = 'Fri';
+
+NAME                                                                            
+----------                                                                      
+Bart                                                                            
+
+SQL> select customers.name || '** To be contacted' from rentals join customers on customers.c_id = rentals.c_id  where (ck_out_date > SYSDATE - 10) and (ret_date is NULL);
+
+CUSTOMERS.NAME||'**TOBECONTA                                                    
+----------------------------                                                    
+Denny     ** To be contacted                                                    
+
+SQL> select vehicles.lic_no, vehicles.model, Replace(Replace(Replace(Replace(vehicles.make, 'T', 'Toyota'), 'F', 'Ford'), 'D', 'Dodge'), 'H', 'Honda') as make from rentals join vehicles on vehicles.id = rentals.c_id  where (TO_CHAR(ck_out_date, 'Mon') = 'Oct') and (TO_CHAR(ret_date, 'Mon') = 'Nov');
+
+LIC_NO     MODEL                                                                
+---------- ----------                                                           
+MAKE                                                                            
+--------------------------------------------------------------------------------
+IJK901     corolla                                                              
+Toyota                                                                          
+                                                                                
+
+SQL> Select text from user_views where view_name = 'QUEST5';
+
+TEXT                                                                            
+--------------------------------------------------------------------------------
+select vehicles.lic_no, count(ck_out_date) from rentals join vehicles on vehicle
+s.id = rentals.c_id where TO_CHAR(ck_out_date, 'Mon') = 'Oct' group by rentals.v
+_id, vehicles.lic_no                                                            
+                                                                                
+
+SQL> select * from quest5;
+
+LIC_NO     TIMES_RENTED                                                         
+---------- ------------                                                         
+IJK901                1                                                         
+BCD2345               1                                                         
+
+SQL> spool off;
